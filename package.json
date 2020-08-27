@@ -1,0 +1,16 @@
+{
+  "name": "reaktor-package-reader",
+  "version": "1.0.0",
+  "description": "WebApp to read information about packages from a file and display it in readable format",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "nodemon index.js"
+  },
+  "author": "Subro Black",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.17.1",
+    "nodemon": "^2.0.4"
+  }
+}
