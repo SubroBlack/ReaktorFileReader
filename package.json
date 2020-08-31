@@ -4,6 +4,7 @@
   "description": "WebApp to read information about packages from a file and display it in readable format",
   "main": "index.js",
   "scripts": {
+    "start": "node index.js",
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "nodemon index.js",
     "build:ui": "rm -rf build && cd Front && npm install && npm run build --prod && cp -r build ..",
