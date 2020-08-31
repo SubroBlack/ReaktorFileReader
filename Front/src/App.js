@@ -14,6 +14,7 @@ const App = () => {
       return a.name.localeCompare(b.name);
     });
     setPackages(result.data);
+    console.log("Packs: ", packages);
   };
 
   // Fetch the packages Info
@@ -23,9 +24,7 @@ const App = () => {
 
   // Function to find the package by name
   const showPack = (name) => {
-    console.log("Pack to be filtered: ", name);
     const packs = packages.filter((p) => p.name === name);
-    console.log("Filtered Packs: ", packs);
     if (packs.length === 1) {
       setPackDetails(packs[0]);
     }
@@ -34,8 +33,6 @@ const App = () => {
   if (!packages) {
     return null;
   }
-
-  console.log("Packs: ", packages);
 
   return (
     <div className="App">
