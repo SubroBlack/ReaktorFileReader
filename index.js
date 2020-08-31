@@ -1,13 +1,30 @@
 const express = require("express");
 const fs = require("fs");
-const readline = require("readline");
+const cors = require("cors");
 const app = express();
+
+app.use(express.json());
+app.use(express.static("build"));
+app.use(cors());
+
+const status = "./status.real";
+const stautsJSON = "./status.json";
+
+// Function to turn list of packages into array of packages name without version:
+const list = (packages) => {
+  let result = [];
+  const packs = packages.split(", ");
+  packs.forEach((pack) => {
+    result.push(pack.split(" ")[0]);
+  });
+  return result;
+};
 
 /*
   Function to Read given File and Create array of objects
 */
-const readGivenFile = () => {
-  const data = fs.readFileSync("status.real", {
+const readGivenFile = (status) => {
+  const data = fs.readFileSync(status, {
     encoding: "utf-8",
   });
   const arr = [];
@@ -22,9 +39,11 @@ const readGivenFile = () => {
       } else if (line.startsWith("Description: ")) {
         p.description = line.substring(13);
       } else if (line.startsWith("Depends: ")) {
-        p.dependencies = line.substring(9);
+        dependencies = line.substring(9);
+        p.dependencies = list(dependencies);
       } else if (line.startsWith("Provides: ")) {
-        p.supports = line.substring(10);
+        supports = line.substring(10);
+        p.supports = list(supports);
       }
     });
     arr.push(p);
@@ -57,10 +76,16 @@ const readJSONFile = () => {
 };
 
 app.get("/", (req, res) => {
-  console.log("Queried");
-  const data = readGivenFile();
-  makeJSONFile(data);
-  res.json(data);
+  res.send("Packages Here!");
+});
+
+app.get("/packages", (req, res) => {
+  if (!fs.existsSync(stautsJSON)) {
+    const data = readGivenFile(status);
+    makeJSONFile(data);
+  }
+  let result = readJSONFile(stautsJSON);
+  res.json(result);
 });
 
 app.get("/package/:name", (req, res) => {
@@ -73,4 +98,4 @@ app.get("/package/:name", (req, res) => {
     : res.json(package);
 });
 
-app.listen(3000);
+app.listen(3001);
