@@ -28,6 +28,13 @@
   color: #61dafb;
 }
 
+.SearchBar {
+  padding-top: 2vh;
+  padding-bottom: 2vh;
+  background-color: grey;
+  background-blend-mode: darken;
+}
+
 @keyframes App-logo-spin {
   from {
     transform: rotate(0deg);
