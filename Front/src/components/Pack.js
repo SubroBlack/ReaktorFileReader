@@ -47,6 +47,14 @@ const Pack = ({ pack, showPack }) => {
           onChange={({ target }) => setTag(target.value)}
         />
         <input type="button" onClick={addTags} value="Add" />
+        {tags.length > 0 ? (
+          <>
+            <br />
+            <b>Tags to be Added: </b>
+            {showList(tags)}
+          </>
+        ) : null}
+        <br />
         <button type="submit">Submit</button>
       </form>
 

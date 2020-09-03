@@ -96,7 +96,7 @@ app.post("/packages/:name", (req, res) => {
     res.json({ err: "No such package Found" });
   }
   const pack = result[0];
-  pack.tags = req.body;
+  pack.tags ? (pack.tags = pack.tags.concat(req.body)) : (pack.tags = req.body);
   const otherPacks = data.filter((p) => p.name !== req.params.name.toString());
   otherPacks.push(pack);
   makeJSONFile(otherPacks);
