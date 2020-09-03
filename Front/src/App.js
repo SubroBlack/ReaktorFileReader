@@ -12,12 +12,13 @@ const App = () => {
   // Function to Fetch Packages
   const fetchPackages = async () => {
     const result = await axios.get("/packages");
+    console.log("Result from Server: ", result.data);
     result.data.sort((a, b) => {
       return a.name.localeCompare(b.name);
     });
     setPackages(result.data);
     setDisplayPacks(result.data);
-    console.log("Packs: ", displayPacks);
+    console.log("Packs: ", result.data);
   };
 
   // Fetch the packages Info

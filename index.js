@@ -8,7 +8,7 @@ app.use(express.static("build"));
 app.use(cors());
 
 const status = "./status.real";
-const stautsJSON = "./status.json";
+const statusJSON = "./status.json";
 
 // Function to turn list of packages into array of packages name without version:
 const list = (packages) => {
@@ -68,8 +68,8 @@ const makeJSONFile = (data) => {
 /*
   Function to Read given File return into JS objects
 */
-const readJSONFile = () => {
-  const data = fs.readFileSync("./status.json", {
+const readJSONFile = (status) => {
+  const data = fs.readFileSync(status, {
     encoding: "utf-8",
   });
   return JSON.parse(data);
@@ -80,22 +80,28 @@ app.get("/", (req, res) => {
 });
 
 app.get("/packages", (req, res) => {
-  if (!fs.existsSync(stautsJSON)) {
+  if (!fs.existsSync(statusJSON)) {
     const data = readGivenFile(status);
     makeJSONFile(data);
   }
-  let result = readJSONFile(stautsJSON);
+  let result = readJSONFile(statusJSON);
   res.json(result);
 });
 
-app.get("/package/:name", (req, res) => {
-  const data = readJSONFile();
-  const package = data.filter(
-    (pack) => pack.name === req.params.name.toString()
-  );
-  package.length === 0
-    ? res.json({ err: "No such package Found" })
-    : res.json(package);
+app.post("/packages/:name", (req, res) => {
+  console.log("Post Req Came", req.body);
+  const data = readJSONFile(statusJSON);
+  const result = data.filter((p) => p.name === req.params.name.toString());
+  if (result.length === 0) {
+    res.json({ err: "No such package Found" });
+  }
+  const pack = result[0];
+  pack.tags = req.body;
+  const otherPacks = data.filter((p) => p.name !== req.params.name.toString());
+  otherPacks.push(pack);
+  makeJSONFile(otherPacks);
+  newData = readJSONFile(statusJSON);
+  res.json(newData);
 });
 
 const PORT = process.env.PORT || 3001;
